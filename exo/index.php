@@ -1,5 +1,14 @@
 <?php
 
+session_start();
+
+if (!isset($_SESSION['user_id'])) {
+
+    header('Location: connexion-utilisateur.php');
+    exit;
+
+}
+
 require_once('connexion.php');
 
 $request = $db->prepare('
@@ -49,14 +58,6 @@ $users = $request->fetchAll();
 
             <input
                 type="text"
-                name="username"
-                placeholder="Username"
-                value="<?= isset($_COOKIE['username']) ? htmlspecialchars($_COOKIE['username']) : '' ?>"
-                required
-            >
-
-            <input
-                type="text"
                 name="message"
                 placeholder="Write a message..."
                 required
@@ -69,7 +70,8 @@ $users = $request->fetchAll();
         </form>
 
     </div>
-
+     <a href="deconnexion.php">Se déconnecter</a>
+      
     <div class="users-area">
 
         <h2>Connected users</h2>

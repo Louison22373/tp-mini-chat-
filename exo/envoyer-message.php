@@ -1,38 +1,24 @@
 <?php
 
+session_start();
+
 require_once('connexion.php');
 
-$username = $_POST['username'];
+
+// Récupérer l'utilisateur connecté
+$userId = $_SESSION['user_id'];
+
+
+// Récupérer le message
 $message = $_POST['message'];
 
+
+// Récupérer le pseudo
+$username = $_SESSION['username'];
+
+
+// Enregistrer le cookie
 setcookie('username', $username, time() + 86400 * 30);
-
-// Chercher l'utilisateur
-$request = $db->prepare(
-    'SELECT id FROM users WHERE username = ?'
-);
-
-$request->execute([$username]);
-
-$user = $request->fetch();
-
-
-// Si l'utilisateur existe
-if ($user) {
-
-    $userId = $user['id'];
-
-} else {
-
-    // Créer un nouvel utilisateur
-    $request = $db->prepare(
-        'INSERT INTO users (username) VALUES (?)'
-    );
-
-    $request->execute([$username]);
-
-    $userId = $db->lastInsertId();
-}
 
 
 // Date et heure
