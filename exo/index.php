@@ -3,20 +3,9 @@
 require_once('connexion.php');
 
 $request = $db->prepare('
-SELECT messages.message, messages.created_at, users.username
-FROM messages
-INNER JOIN users ON messages.user_id = users.id
-ORDER BY messages.created_at ASC
-');
-
-$request->execute();
-
-$messages = $request->fetchAll();
-
-$request = $db->prepare('
-SELECT username
-FROM users
-ORDER BY username ASC
+    SELECT username
+    FROM users
+    ORDER BY username ASC
 ');
 
 $request->execute();
@@ -37,6 +26,7 @@ $users = $request->fetchAll();
 <title>Mini Chat</title>
 
 <link rel="stylesheet" href="style.css">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
@@ -51,39 +41,19 @@ $users = $request->fetchAll();
 
         <h1>Welcome</h1>
 
-        <div class="messages">
-
-            <?php foreach ($messages as $message): ?>
-
-                <div class="message">
-
-                    <span class="username">
-                        <?= htmlspecialchars($message['username']) ?>
-                    </span>
-
-                    <div class="message-content">
-                        <?= htmlspecialchars($message['message']) ?>
-                    </div>
-
-                    <small>
-                        <?= $message['created_at'] ?>
-                    </small>
-
-                </div>
-
-            <?php endforeach; ?>
+        <div class="messages" id="messages">
 
         </div>
 
-        <form action="envoyer-message.php" method="POST">
+        <form id="message-form" action="envoyer-message.php" method="POST">
 
             <input
-    type="text"
-    name="username"
-    placeholder="Username"
-    value="<?= isset($_COOKIE['username']) ? htmlspecialchars($_COOKIE['username']) : '' ?>"
-    required
->
+                type="text"
+                name="username"
+                placeholder="Username"
+                value="<?= isset($_COOKIE['username']) ? htmlspecialchars($_COOKIE['username']) : '' ?>"
+                required
+            >
 
             <input
                 type="text"
@@ -115,6 +85,47 @@ $users = $request->fetchAll();
     </div>
 
 </div>
+
+<script>
+
+function refreshMessages() {
+
+    fetch('messages.php')
+        .then(response => response.text())
+        .then(data => {
+
+            document.getElementById('messages').innerHTML = data;
+
+        });
+
+}
+
+refreshMessages();
+
+setInterval(refreshMessages, 2000);
+
+
+document.getElementById('message-form').addEventListener('submit', function(event) {
+
+    event.preventDefault();
+
+    const formData = new FormData(this);
+
+    fetch('envoyer-message.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(() => {
+
+        this.reset();
+
+        refreshMessages();
+
+    });
+
+});
+
+</script>
 
 </body>
 

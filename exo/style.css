@@ -26,7 +26,7 @@ h1 {
     font-size: 38px;
     font-weight: normal;
     margin-bottom: 45px;
-    color: blueviolet;
+    color: rgb(191, 5, 248);
 }
 
 .messages {
@@ -50,7 +50,7 @@ h1 {
 .username {
     display: inline-block;
     padding: 3px 10px;
-    background-color: #d9d9d9;
+    background-color: #0071aa;
     border-radius: 10px;
     font-size: 12px;
 }
@@ -111,8 +111,8 @@ form button:hover {
     width: 220px;
     height: 100vh;
     padding: 10px 15px;
-    background-color: white;
-    border-left: 1px solid #ddd;
+    background-color: rgba(10, 227, 194, 0.941);
+    border-left: 1px solid #ffffff;
 }
 
 .users-area h2 {
