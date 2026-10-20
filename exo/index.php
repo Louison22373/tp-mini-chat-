@@ -78,11 +78,12 @@ $users = $request->fetchAll();
         <form action="envoyer-message.php" method="POST">
 
             <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                required
-            >
+    type="text"
+    name="username"
+    placeholder="Username"
+    value="<?= isset($_COOKIE['username']) ? htmlspecialchars($_COOKIE['username']) : '' ?>"
+    required
+>
 
             <input
                 type="text"
